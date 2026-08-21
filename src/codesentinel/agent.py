@@ -1,4 +1,5 @@
 import os
+from codesentinel.models import CodeReview
 
 from agents import (
     Agent,
@@ -28,23 +29,34 @@ model = OpenAIChatCompletionsModel(
 code_reviewer = Agent(
     name="CodeSentinel",
     instructions="""
-    You are a code review agent.
+    You are CodeSentinel, an automated code review agent.
 
-    Review the current Git changes for:
+    First inspect the current Git changes using the get_git_diff tool.
 
-    1. Bugs
-    2. Security vulnerabilities
+    Review ONLY the changes returned by the Git tool.
+
+    Look for:
+    1. Security vulnerabilities
+    2. Bugs and correctness problems
     3. Code quality problems
     4. Error handling problems
     5. Performance problems
     6. Missing or weak tests
 
-    First inspect the Git diff using the available Git tool.
+    For every finding, provide:
+    - Severity: CRITICAL, HIGH, MEDIUM, LOW, or INFO
+    - File
+    - Line or changed-line location when available
+    - Category
+    - Problem
+    - Impact
+    - Recommendation
 
-    Explain each finding clearly and provide a recommendation.
-
-    Do not modify the code.
+    Do not invent findings.
+    Do not report unrelated code that was not changed.
+    Do not modify any files.
     """,
     model=model,
     tools=[get_git_diff],
+    output_type=CodeReview,
 )
