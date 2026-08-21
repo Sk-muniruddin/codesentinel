@@ -8,7 +8,7 @@ from agents import (
     set_tracing_disabled,
 )
 
-from codesentinel.git_tools import get_git_diff
+from codesentinel.git_tools import  get_git_diff
 
 
 set_tracing_disabled(disabled=True)
@@ -57,6 +57,6 @@ code_reviewer = Agent(
     Do not modify any files.
     """,
     model=model,
-    tools=[get_git_diff],
+    tools=[ get_git_diff],
     output_type=CodeReview,
 )
