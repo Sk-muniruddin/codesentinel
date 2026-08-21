@@ -1,21 +1,18 @@
 import asyncio
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
 from agents import Runner
+
 from codesentinel.agent import code_reviewer
 
-async def main():
-    code = """
-def get_user(user_id):
-    query = "SELECT * FROM users WHERE id=" + user_id
-    return db.execute(query)
-"""
 
+async def main():
     result = await Runner.run(
         code_reviewer,
-        f"Review this code:\n\n{code}"
+        "Review the current Git changes in this repository.",
     )
 
     print(result.final_output)
