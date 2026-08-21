@@ -1,0 +1,20 @@
+[project]
+name = "codesentinel"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Sk Muniruddin", email = "muniruddin1022@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "openai-agents>=0.22.0",
+    "python-dotenv>=1.2.3",
+]
+
+[project.scripts]
+codesentinel = "codesentinel:main"
+
+[build-system]
+requires = ["uv_build>=0.12.2,<0.13.0"]
+build-backend = "uv_build"
