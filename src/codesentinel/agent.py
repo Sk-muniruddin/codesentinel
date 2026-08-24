@@ -1,5 +1,6 @@
 import os
 
+from dotenv import load_dotenv
 from agents import (
     Agent,
     AsyncOpenAI,
@@ -9,6 +10,8 @@ from agents import (
 
 from codesentinel.models import CodeReview
 
+
+load_dotenv()
 
 set_tracing_disabled(disabled=True)
 
