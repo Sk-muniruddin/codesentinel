@@ -5,3 +5,6 @@ def get_user(user_id):
 
 def get_user_count():
     return 0
+
+def get_user_name(user):
+    return user.username
