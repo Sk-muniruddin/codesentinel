@@ -28,13 +28,13 @@ async def main():
     # Parse the raw GitHub diff into structured changes.
     changes = parse_git_diff(diff)
 
-    # Give only the parsed changes to the Agent.
     parsed_changes = "\n".join(
         f"{change.file}:{change.line} "
         f"[{change.change_type}] {change.content}"
         for change in changes
     )
 
+    # Ask the Agent/LLM to review the changed code.
     result = await Runner.run(
         code_reviewer,
         f"""
@@ -53,9 +53,15 @@ CHANGED CODE:
 """,
     )
 
+    # The Agent already returned a CodeReview object.
     review = result.final_output
 
-    print(review)
+    # Python is the authoritative decision maker.
+    final_status = calculate_status(review.findings)
+
+    print("Findings:", review.findings)
+    print("Summary:", review.summary)
+    print("Final status:", final_status)
 
 
 if __name__ == "__main__":
