@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 from dotenv import load_dotenv
 from agents import Runner
@@ -12,17 +13,34 @@ from codesentinel.models import calculate_status
 load_dotenv()
 
 
-OWNER = "Sk-muniruddin"
-REPOSITORY = "codesentinel"
-PULL_NUMBER = 1
+def get_required_env(name: str) -> str:
+    value = os.getenv(name)
+
+    if not value:
+        raise ValueError(
+            f"{name} environment variable is not set."
+        )
+
+    return value
 
 
 async def main():
+    # Temporary development configuration.
+    # These values will later come dynamically from
+    # the GitHub webhook event.
+    owner = get_required_env("GITHUB_TEST_OWNER")
+    repository = get_required_env("GITHUB_TEST_REPOSITORY")
+    pull_number = int(get_required_env("GITHUB_TEST_PULL_NUMBER"))
+    installation_id = int(
+        get_required_env("GITHUB_TEST_INSTALLATION_ID")
+    )
+
     # Get the raw diff from the GitHub Pull Request.
     diff = get_pull_request_diff(
-        OWNER,
-        REPOSITORY,
-        PULL_NUMBER,
+        owner,
+        repository,
+        pull_number,
+        installation_id,
     )
 
     # Parse the raw GitHub diff into structured changes.
@@ -46,7 +64,7 @@ IMPORTANT:
 - Treat the file and line information as authoritative.
 
 PULL REQUEST:
-{OWNER}/{REPOSITORY}#{PULL_NUMBER}
+{owner}/{repository}#{pull_number}
 
 CHANGED CODE:
 {parsed_changes}
